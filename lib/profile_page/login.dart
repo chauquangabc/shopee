@@ -2,8 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shopee/profile_page/bloc/login_cubit.dart';
 import 'package:shopee/profile_page/login_seller.dart';
 import 'package:shopee/profile_page/register.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -15,12 +18,15 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocProvider(
+  create: (context) => LoginCubit(),
+  child: Scaffold(
       backgroundColor: Color.fromRGBO(214, 217, 217, 1),
       appBar: _buildAppBar(),
       body: _buildBody(),
       bottomNavigationBar: _buildBottomBar()
-    );
+    ),
+);
   }
 
   Widget _buildBody(){
