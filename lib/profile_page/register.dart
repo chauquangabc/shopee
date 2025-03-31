@@ -23,12 +23,13 @@ class _RegisterState extends State<Register> {
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
         actions: [
-          IconButton(onPressed: (){
-            print('Click IconButton Circle Question');
-          },padding: EdgeInsets.only(right: 15),
-              icon: FaIcon(FontAwesomeIcons.circleQuestion,
-            size: 30,
-          ))
+          IconButton(
+            onPressed: () {
+              print('Click IconButton Circle Question');
+            },
+            padding: EdgeInsets.only(right: 15),
+            icon: FaIcon(FontAwesomeIcons.circleQuestion, size: 30),
+          ),
         ],
       ),
 
@@ -52,47 +53,92 @@ class _RegisterState extends State<Register> {
                 margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        //Email
-                        Expanded(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Số điện thoại',
-                              prefixIcon: Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: FaIcon(FontAwesomeIcons.user),
+                    Form(
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  decoration: InputDecoration(
+                                    hintText: 'Số điện thoại',
+                                    prefixIcon: Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: FaIcon(FontAwesomeIcons.user),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 15),
+                          Row(
+                            children: [
+                              //Password
+                              Expanded(
+                                child: TextFormField(
+                                  decoration: InputDecoration(
+                                    hintText: 'Mật khẩu',
+                                    prefixIcon: Padding(
+                                      padding: EdgeInsets.all(8),
+                                      child: FaIcon(FontAwesomeIcons.lock),
+                                    ),
+                                    suffixIcon: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          height: 20,
+                                          width: 1,
+                                          color: Color.fromRGBO(
+                                            214,
+                                            217,
+                                            217,
+                                            1,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  validator: (String? value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Hãy nhập mật khẩu';
+                                    }
+                                    if (value.length < 6) {
+                                      return 'Password phải từ 6 kí tự trở lên';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 15),
+                          Container(
+                            width: double.infinity,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Color.fromRGBO(214, 217, 217, 1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                print('Register');
+                              },
+                              child: Center(
+                                child: Text(
+                                  "Đăng ký",
+                                  style: TextStyle(
+                                    color: Colors.blueGrey,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ), //TextField Số điện thoại
-                    SizedBox(height: 15),
-                    Container(
-                      //Button đăng nhập
-                      width: double.infinity,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(214, 217, 217, 1),
-                        borderRadius: BorderRadius.circular(10),
+                        ],
                       ),
-                      child: InkWell(
-                        onTap: () {
-                          print("Đăng ký !");
-                        },
-                        child: Center(
-                          child: Text(
-                            "Tiếp",
-                            style: TextStyle(
-                              color: Colors.blueGrey,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ), // Button tiếp
+                    ),
                     SizedBox(height: 50),
                     Container(
                       child: Row(
@@ -113,7 +159,7 @@ class _RegisterState extends State<Register> {
                           ),
                         ],
                       ),
-                    ), //Text hoặc
+                    ),
                     SizedBox(height: 20),
                     Container(
                       width: double.infinity,
@@ -154,7 +200,7 @@ class _RegisterState extends State<Register> {
                           ],
                         ),
                       ),
-                    ), // Button đăng ký bằng Google
+                    ),
                     SizedBox(height: 15),
                     Container(
                       width: double.infinity,
@@ -197,21 +243,21 @@ class _RegisterState extends State<Register> {
                           ],
                         ),
                       ),
-                    ), // Button đăng ký bằng Facebook
+                    ),
                     Spacer(), // Đẩy phần tử cuối cùng xuống dưới
                     Container(
-                      margin: EdgeInsets.only(
-                        bottom: 10
-                      ),
+                      margin: EdgeInsets.only(bottom: 10),
                       height: 50,
                       width: double.infinity,
                       child: Column(
                         children: [
                           Text('Bằng việc đăng ký , bạn đã đồng ý với'),
-                          Text('Điều khoản Dịch vụ & Chính sách Riêng tư của Shopee')
+                          Text(
+                            'Điều khoản Dịch vụ & Chính sách Riêng tư của Shopee',
+                          ),
                         ],
                       ),
-                    ) //Text Điều khoản & Dịch vụ 
+                    ),
                   ],
                 ),
               ),

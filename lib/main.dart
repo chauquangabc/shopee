@@ -6,14 +6,19 @@ import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MyApp());
 }
-class MyApp extends StatelessWidget {
+
+
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,7 +28,7 @@ class MyApp extends StatelessWidget {
         primaryColor: const Color(0xFF0E5FFF),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MainPage(),
-    );
+      home: MainPage())
+    ;
   }
 }

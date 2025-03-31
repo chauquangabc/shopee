@@ -1,11 +1,10 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shopee/profile_page/bloc/login_cubit.dart';
 import 'package:shopee/profile_page/login_seller.dart';
 import 'package:shopee/profile_page/register.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 class Login extends StatefulWidget {
@@ -16,27 +15,26 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  bool _isObscure = true;
+  var _autoValidateMode = AutovalidateMode.disabled;
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-  create: (context) => LoginCubit(),
-  child: Scaffold(
+    return Scaffold(
       backgroundColor: Color.fromRGBO(214, 217, 217, 1),
       appBar: _buildAppBar(),
       body: _buildBody(),
-      bottomNavigationBar: _buildBottomBar()
-    ),
-);
+      bottomNavigationBar: _buildBottomBar(),
+    );
   }
 
-  Widget _buildBody(){
+  Widget _buildBody() {
     return Container(
       color: Colors.white,
       margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          //Image_logo_shopee
           Expanded(
             flex: 1,
             child: Transform.scale(
@@ -49,50 +47,53 @@ class _LoginState extends State<Login> {
             child: Container(
               color: Colors.white,
               margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
-              child: Column(
-                children: [
-                  _buildFormUserName(),
-                  SizedBox(height: 10),
-                  _buildFormPassword(),
-                  SizedBox(height: 15),
-                 _buildButtonLogin(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Đăng nhập bằng SMS',
-                          style: TextStyle(color: Colors.blue, fontSize: 16),
-                        ),
-                      ),
-                    ],
-                  ), //TextButton Login SMS
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+              child: Form(
+                autovalidateMode: _autoValidateMode,
+                child: Column(
+                  children: [
+                    _buildFormUserName(),
+                    SizedBox(height: 10),
+                    _buildFormPassword(),
+                    SizedBox(height: 15),
+                    _buildButtonLogin(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Container(
-                          height: 1,
-                          width: 80,
-                          color: Color.fromRGBO(214, 217, 217, 1),
-                        ),
-                        SizedBox(width: 5),
-                        Text('Hoặc', style: TextStyle(fontSize: 16)),
-                        SizedBox(width: 5),
-                        Container(
-                          height: 1,
-                          width: 80,
-                          color: Color.fromRGBO(214, 217, 217, 1),
+                        TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'Đăng nhập bằng SMS',
+                            style: TextStyle(color: Colors.blue, fontSize: 16),
+                          ),
                         ),
                       ],
-                    ),
-                  ), // Text Hoặc
-                  SizedBox(height: 10),
-                  _buildButtonLoginWithGG(),
-                  SizedBox(height: 15),
-                  _buildButtonLoginWithFB()
-                ],
+                    ), //TextButton Login SMS
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 1,
+                            width: 80,
+                            color: Color.fromRGBO(214, 217, 217, 1),
+                          ),
+                          SizedBox(width: 5),
+                          Text('Hoặc', style: TextStyle(fontSize: 16)),
+                          SizedBox(width: 5),
+                          Container(
+                            height: 1,
+                            width: 80,
+                            color: Color.fromRGBO(214, 217, 217, 1),
+                          ),
+                        ],
+                      ),
+                    ), // Text Hoặc
+                    SizedBox(height: 10),
+                    _buildButtonLoginWithGG(),
+                    SizedBox(height: 15),
+                    _buildButtonLoginWithFB(),
+                  ],
+                ),
               ),
             ),
           ),
@@ -100,7 +101,8 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-  Widget _buildBottomBar(){
+
+  Widget _buildBottomBar() {
     return BottomAppBar(
       color: Color.fromRGBO(214, 217, 217, 1),
       child: Row(
@@ -128,32 +130,44 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-  Widget _buildFormUserName(){
-    return Form(
-      child: Row(
-        children: [
-          //Email
-          Expanded(
-            child: TextFormField(
-              decoration: InputDecoration(
-                hintText: 'Số điện thoại/Tên đăng nhập',
-                prefixIcon: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: FaIcon(FontAwesomeIcons.user),
-                ),
+
+  Widget _buildFormUserName() {
+    return Row(
+      children: [
+        Expanded(
+          child: TextFormField(
+            decoration: InputDecoration(
+              hintText: 'Email/Số điện thoại',
+              prefixIcon: Padding(
+                padding: const EdgeInsets.all(8),
+                child: FaIcon(FontAwesomeIcons.user),
               ),
             ),
+            validator: (String? value) {
+              if (value == null || value.isEmpty) {
+                return "Hãy nhập tài khoản ";
+              }
+              bool isEmail = EmailValidator.validate(value);
+              bool isPhoneNumber = RegExp(r'^[0-9]{9,15}$').hasMatch(value);
+              if (isEmail || isPhoneNumber) {
+                return null;
+              } else {
+                return 'Tài khoản không hợp lệ !';
+              }
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
-  Widget _buildFormPassword(){
-    return   Row(
+
+  Widget _buildFormPassword() {
+    return Row(
       children: [
         //Password
         Expanded(
-          child: TextField(
+          child: TextFormField(
+            obscureText: _isObscure,
             decoration: InputDecoration(
               hintText: 'Mật khẩu',
               prefixIcon: Padding(
@@ -164,8 +178,14 @@ class _LoginState extends State<Login> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    onPressed: () {},
-                    icon: FaIcon(FontAwesomeIcons.eye),
+                    onPressed: () {
+                      setState(() {
+                        _isObscure = !_isObscure;
+                      });
+                    },
+                    icon: Icon(
+                      _isObscure ? Icons.visibility : Icons.visibility_off,
+                    ),
                   ),
                   Container(
                     height: 20,
@@ -186,13 +206,23 @@ class _LoginState extends State<Login> {
                 ],
               ),
             ),
+            validator: (String? value) {
+              if (value == null || value.isEmpty) {
+                return 'Hãy nhập mật khẩu';
+              }
+              if (value.length < 6) {
+                return 'Password phải từ 6 kí tự trở lên';
+              }
+              return null;
+            },
           ),
         ),
       ],
     );
   }
-  Widget _buildButtonLogin(){
-    return  Container(
+
+  Widget _buildButtonLogin() {
+    return Container(
       width: double.infinity,
       height: 50,
       decoration: BoxDecoration(
@@ -200,8 +230,8 @@ class _LoginState extends State<Login> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: InkWell(
-        onTap: () {
-          print("Đăng nhập !");
+        onTap: (){
+          print('abc');
         },
         child: Center(
           child: Text(
@@ -216,16 +246,15 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-  Widget _buildButtonLoginWithGG(){
-    return  Container(
+
+  Widget _buildButtonLoginWithGG() {
+    return Container(
       width: double.infinity,
       height: 50,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Color.fromRGBO(214, 217, 217, 1),
-        ),
+        border: Border.all(color: Color.fromRGBO(214, 217, 217, 1)),
       ),
       child: InkWell(
         onTap: () {
@@ -259,16 +288,15 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-  Widget _buildButtonLoginWithFB(){
+
+  Widget _buildButtonLoginWithFB() {
     return Container(
       width: double.infinity,
       height: 50,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Color.fromRGBO(214, 217, 217, 1),
-        ),
+        border: Border.all(color: Color.fromRGBO(214, 217, 217, 1)),
       ),
       child: InkWell(
         onTap: () {
@@ -303,6 +331,7 @@ class _LoginState extends State<Login> {
       ),
     );
   }
+
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       iconTheme: IconThemeData(color: Colors.orange, size: 40),
@@ -337,4 +366,5 @@ class _LoginState extends State<Login> {
       ],
     );
   }
+
 }
