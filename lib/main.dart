@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shopee/home_page/main_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:shopee/page_unloggin/main_page_unloggin.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -9,7 +9,6 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MyApp());
 }
-
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -28,7 +27,7 @@ class _MyAppState extends State<MyApp> {
         primaryColor: const Color(0xFF0E5FFF),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MainPage())
-    ;
+      home: MainPage(),
+    );
   }
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shopee/home_page/body_home_page/body_component1.dart';
-import 'package:shopee/home_page/body_home_page/body_component2.dart';
-import 'package:shopee/home_page/body_home_page/body_component3.dart';
 import '../appbar.dart';
+import 'body_component1.dart';
+import 'body_component2.dart';
+import 'body_component3.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

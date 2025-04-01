@@ -1,30 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../profile_page/profile_screen.dart';
-import 'body_home_page/body_main_page.dart';
-
-class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+import 'profile_page/profile_screen.dart';
+import 'home_page/body_home_page/body_main_page.dart';
+class MainPageUnLoggin extends StatefulWidget {
+  const MainPageUnLoggin({super.key});
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<MainPageUnLoggin> createState() => _MainPageUnLogginState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageUnLogginState extends State<MainPageUnLoggin> {
   List<Widget> _page = [];
   int _currentPage = 0;
-
   @override
   void initState() {
     // TODO: implement initState
     _page = [
       HomeScreen(),
-      Container(color: Colors.blue),
+      Container(color: Colors.grey,),
       ProfileScreen()
     ];
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

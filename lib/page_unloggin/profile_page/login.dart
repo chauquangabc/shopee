@@ -1,12 +1,11 @@
-import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shopee/profile_page/login_seller.dart';
-import 'package:shopee/profile_page/register.dart';
+import 'package:shopee/page_unloggin/profile_page/register.dart';
 
-
+import 'login_seller.dart';
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -15,8 +14,29 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool _isObscure = true;
-  var _autoValidateMode = AutovalidateMode.disabled;
+
+  Future signIn() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+      debugPrint('Login successful!');
+    } catch (e) {
+      debugPrint('Error during login: $e');
+      print(e);
+    }
+  }
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,59 +61,56 @@ class _LoginState extends State<Login> {
               scale: 0.7,
               child: Image.asset('assets/shopee_logo.png'),
             ),
-          ), //Image_logo_shopee
+          ),
           Expanded(
             flex: 4,
             child: Container(
               color: Colors.white,
               margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
-              child: Form(
-                autovalidateMode: _autoValidateMode,
-                child: Column(
-                  children: [
-                    _buildFormUserName(),
-                    SizedBox(height: 10),
-                    _buildFormPassword(),
-                    SizedBox(height: 15),
-                    _buildButtonLogin(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+              child: Column(
+                children: [
+                  _buildFormUserName(),
+                  SizedBox(height: 10),
+                  _buildFormPassword(),
+                  SizedBox(height: 15),
+                  _buildButtonLogin(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          'Đăng nhập bằng SMS',
+                          style: TextStyle(color: Colors.blue, fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            'Đăng nhập bằng SMS',
-                            style: TextStyle(color: Colors.blue, fontSize: 16),
-                          ),
+                        Container(
+                          height: 1,
+                          width: 80,
+                          color: Color.fromRGBO(214, 217, 217, 1),
+                        ),
+                        SizedBox(width: 5),
+                        Text('Hoặc', style: TextStyle(fontSize: 16)),
+                        SizedBox(width: 5),
+                        Container(
+                          height: 1,
+                          width: 80,
+                          color: Color.fromRGBO(214, 217, 217, 1),
                         ),
                       ],
-                    ), //TextButton Login SMS
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 1,
-                            width: 80,
-                            color: Color.fromRGBO(214, 217, 217, 1),
-                          ),
-                          SizedBox(width: 5),
-                          Text('Hoặc', style: TextStyle(fontSize: 16)),
-                          SizedBox(width: 5),
-                          Container(
-                            height: 1,
-                            width: 80,
-                            color: Color.fromRGBO(214, 217, 217, 1),
-                          ),
-                        ],
-                      ),
-                    ), // Text Hoặc
-                    SizedBox(height: 10),
-                    _buildButtonLoginWithGG(),
-                    SizedBox(height: 15),
-                    _buildButtonLoginWithFB(),
-                  ],
-                ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  _buildButtonLoginWithGG(),
+                  SizedBox(height: 15),
+                  _buildButtonLoginWithFB(),
+                ],
               ),
             ),
           ),
@@ -135,7 +152,8 @@ class _LoginState extends State<Login> {
     return Row(
       children: [
         Expanded(
-          child: TextFormField(
+          child: TextField(
+            controller: _emailController,
             decoration: InputDecoration(
               hintText: 'Email/Số điện thoại',
               prefixIcon: Padding(
@@ -143,18 +161,6 @@ class _LoginState extends State<Login> {
                 child: FaIcon(FontAwesomeIcons.user),
               ),
             ),
-            validator: (String? value) {
-              if (value == null || value.isEmpty) {
-                return "Hãy nhập tài khoản ";
-              }
-              bool isEmail = EmailValidator.validate(value);
-              bool isPhoneNumber = RegExp(r'^[0-9]{9,15}$').hasMatch(value);
-              if (isEmail || isPhoneNumber) {
-                return null;
-              } else {
-                return 'Tài khoản không hợp lệ !';
-              }
-            },
           ),
         ),
       ],
@@ -164,10 +170,10 @@ class _LoginState extends State<Login> {
   Widget _buildFormPassword() {
     return Row(
       children: [
-        //Password
         Expanded(
-          child: TextFormField(
+          child: TextField(
             obscureText: _isObscure,
+            controller: _passwordController,
             decoration: InputDecoration(
               hintText: 'Mật khẩu',
               prefixIcon: Padding(
@@ -206,15 +212,6 @@ class _LoginState extends State<Login> {
                 ],
               ),
             ),
-            validator: (String? value) {
-              if (value == null || value.isEmpty) {
-                return 'Hãy nhập mật khẩu';
-              }
-              if (value.length < 6) {
-                return 'Password phải từ 6 kí tự trở lên';
-              }
-              return null;
-            },
           ),
         ),
       ],
@@ -229,10 +226,8 @@ class _LoginState extends State<Login> {
         color: Color.fromRGBO(214, 217, 217, 1),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: InkWell(
-        onTap: (){
-          print('abc');
-        },
+      child: GestureDetector(
+        onTap: signIn,
         child: Center(
           child: Text(
             "Đăng nhập",
@@ -366,5 +361,4 @@ class _LoginState extends State<Login> {
       ],
     );
   }
-
 }
