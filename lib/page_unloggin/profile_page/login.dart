@@ -5,7 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shopee/page_unloggin/profile_page/register.dart';
 
+import '../../page_logged/main_page_logged.dart';
+import 'forgot_password.dart';
 import 'login_seller.dart';
+
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -24,12 +27,17 @@ class _LoginState extends State<Login> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainPageLogged()),
+      );
       debugPrint('Login successful!');
     } catch (e) {
       debugPrint('Error during login: $e');
       print(e);
     }
   }
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -199,7 +207,14 @@ class _LoginState extends State<Login> {
                     color: Color.fromRGBO(214, 217, 217, 1),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ForgotPassword(),
+                        ),
+                      );
+                    },
                     child: Text(
                       'Quên ?',
                       style: TextStyle(

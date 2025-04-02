@@ -1,6 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import '../../page_logged/main_page_logged.dart';
 import 'login.dart';
 
 class Register extends StatefulWidget {
@@ -11,6 +12,56 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPassword = TextEditingController();
+  bool _isObscure1 = true;
+  bool _isObscure2 = true;
+  var _autoValidMode = AutovalidateMode.disabled;
+
+  bool checkPassword() {
+    if (_passwordController.text.trim() == _confirmPassword.text.trim()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future register() async {
+    if (_autoValidMode == AutovalidateMode.disabled) {
+      setState(() {
+        _autoValidMode = AutovalidateMode.always;
+      });
+    }
+    final isValid = _formKey.currentState?.validate() ?? false;
+    try {
+      if (checkPassword()) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => MainPageLogged()),
+        );
+        print('Register Succesful');
+      } else {
+        print('Bugggg');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,41 +84,52 @@ class _RegisterState extends State<Register> {
           ),
         ],
       ),
-
       body: Container(
         margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
         color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              flex: 1,
-              child: Transform.scale(
-                scale: 0.7,
-                child: Image.asset('assets/shopee_logo.png'),
-              ),
-            ), //Image logo shopee
-            Expanded(
-              flex: 4,
-              child: Container(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/shopee_logo.png',scale: 4,),
+              SizedBox(height: 20,),
+              Container(
                 color: Colors.white,
                 margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
                 child: Column(
                   children: [
                     Form(
+                      key: _formKey,
+                      autovalidateMode: _autoValidMode,
                       child: Column(
                         children: [
                           Row(
                             children: [
                               Expanded(
                                 child: TextFormField(
+                                  controller: _emailController,
                                   decoration: InputDecoration(
-                                    hintText: 'Số điện thoại',
+                                    hintText: 'Email / Số điện thoại',
                                     prefixIcon: Padding(
                                       padding: const EdgeInsets.all(8),
                                       child: FaIcon(FontAwesomeIcons.user),
                                     ),
                                   ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Vui lòng nhập email hoặc số điện thoại';
+                                    }
+                                    final bool emailValid = RegExp(
+                                      r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+                                    ).hasMatch(value);
+                                    final bool phoneValid = RegExp(
+                                      r"^\d{9,15}$",
+                                    ).hasMatch(value);
+                                    if (!emailValid && !phoneValid) {
+                                      return 'Tài khoản không hợp lệ! ';
+                                    }
+                                    return null;
+                                  },
                                 ),
                               ),
                             ],
@@ -75,9 +137,10 @@ class _RegisterState extends State<Register> {
                           SizedBox(height: 15),
                           Row(
                             children: [
-                              //Password
                               Expanded(
                                 child: TextFormField(
+                                  obscureText: _isObscure1,
+                                  controller: _passwordController,
                                   decoration: InputDecoration(
                                     hintText: 'Mật khẩu',
                                     prefixIcon: Padding(
@@ -87,27 +150,73 @@ class _RegisterState extends State<Register> {
                                     suffixIcon: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Container(
-                                          height: 20,
-                                          width: 1,
-                                          color: Color.fromRGBO(
-                                            214,
-                                            217,
-                                            217,
-                                            1,
+                                        IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              _isObscure1 = !_isObscure1;
+                                            });
+                                          },
+                                          icon: Icon(
+                                            _isObscure1
+                                                ? Icons.visibility
+                                                : Icons.visibility_off,
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                  validator: (String? value) {
+                                  validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'Hãy nhập mật khẩu';
+                                      return 'Vui lòng nhập mật khẩu';
+                                    } else if (value.length < 6) {
+                                      return 'Mật khẩu không hợp lệ ';
+                                    } else {
+                                      return null;
                                     }
-                                    if (value.length < 6) {
-                                      return 'Password phải từ 6 kí tự trở lên';
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 15),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  obscureText: _isObscure2,
+                                  controller: _confirmPassword,
+                                  decoration: InputDecoration(
+                                    hintText: 'Xác nhận mật khẩu',
+                                    prefixIcon: Padding(
+                                      padding: EdgeInsets.all(8),
+                                      child: FaIcon(FontAwesomeIcons.lock),
+                                    ),
+                                    suffixIcon: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              _isObscure2 = !_isObscure2;
+                                            });
+                                          },
+                                          icon: Icon(
+                                            _isObscure2
+                                                ? Icons.visibility
+                                                : Icons.visibility_off,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Vui lòng nhập mật khẩu';
+                                    } else if (!checkPassword()) {
+                                      return 'Mật khẩu chưa trùng khớp';
+                                    } else {
+                                      return null;
                                     }
-                                    return null;
                                   },
                                 ),
                               ),
@@ -122,9 +231,7 @@ class _RegisterState extends State<Register> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: InkWell(
-                              onTap: () {
-                                print('Register');
-                              },
+                              onTap: register,
                               child: Center(
                                 child: Text(
                                   "Đăng ký",
@@ -181,10 +288,6 @@ class _RegisterState extends State<Register> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Image.asset('assets/img_google.png'),
-                              // child: FaIcon(
-                              //   FontAwesomeIcons.google,
-                              //   color: Color(0xFF4285F4),
-                              // ),
                             ),
                             Expanded(
                               child: Center(
@@ -223,11 +326,6 @@ class _RegisterState extends State<Register> {
                             Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Image.asset('assets/img_facebook.png'),
-                              // padding: const EdgeInsets.all(8.0),
-                              // child: FaIcon(
-                              //   FontAwesomeIcons.facebook,
-                              //   color: Color(0xFF4285F4),
-                              // ),
                             ),
                             Expanded(
                               child: Center(
@@ -245,7 +343,7 @@ class _RegisterState extends State<Register> {
                         ),
                       ),
                     ),
-                    Spacer(), // Đẩy phần tử cuối cùng xuống dưới
+                    SizedBox(height: 20,),
                     Container(
                       margin: EdgeInsets.only(bottom: 10),
                       height: 50,
@@ -262,11 +360,12 @@ class _RegisterState extends State<Register> {
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
+
+        bottomNavigationBar: BottomAppBar(
         color: Color.fromRGBO(214, 217, 217, 1),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,

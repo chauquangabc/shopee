@@ -9,7 +9,6 @@ class MainPageUnLoggin extends StatefulWidget {
   @override
   State<MainPageUnLoggin> createState() => _MainPageUnLogginState();
 }
-
 class _MainPageUnLogginState extends State<MainPageUnLoggin> {
   List<Widget> _page = [];
   int _currentPage = 0;
