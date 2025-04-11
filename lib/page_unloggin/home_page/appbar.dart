@@ -2,22 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../profile_page/login.dart';
-
 class CustomAppbar extends StatelessWidget implements PreferredSize {
   const CustomAppbar({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 100,
+        height: 110,
         color: Color.fromRGBO(237, 78, 46, 1),
         child: Row(
           children: [
             Container(
               margin: EdgeInsets.fromLTRB(10, 50, 0, 10),
               width: 300,
-              height: 40,
+              height: 60,
               decoration: BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.rectangle,
@@ -28,9 +26,15 @@ class CustomAppbar extends StatelessWidget implements PreferredSize {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 12),
+                          horizontal: 10, vertical: 15),
                       child: TextField(
                         decoration: InputDecoration(
+                          hintText: 'Tìm kiếm',
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
                           border: InputBorder.none,
                         ),
                       ),
@@ -38,7 +42,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSize {
                   ),
                   IconButton(
                       onPressed: () {
-                        print('Av');
+                        print('Find Product');
                       },
                       icon: FaIcon(FontAwesomeIcons.magnifyingGlass))
                 ],
@@ -50,13 +54,16 @@ class CustomAppbar extends StatelessWidget implements PreferredSize {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    IconButton(onPressed: () {
+                    IconButton(
+                        onPressed: () {
                       print('Click cartShopping');
                     },
                         icon: FaIcon(
+                          size: 30,
                           FontAwesomeIcons.cartShopping, color: Colors.white,)),
                     IconButton(onPressed: () {},
                         icon: FaIcon(
+                          size: 30,
                           FontAwesomeIcons.solidMessage, color: Colors.white,))
                   ],
                 ),

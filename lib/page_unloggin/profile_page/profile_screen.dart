@@ -158,7 +158,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         backgroundColor: Colors.white,
                         shadowColor: Colors.transparent,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return Login();
+                            },
+                          ),
+                        );
+                      },
                       child: Row(
                         children: [
                           FaIcon(
@@ -327,7 +336,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               shadowColor: Colors.transparent,
                               padding: EdgeInsets.all(5),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return Login();
+                                  },
+                                ),
+                              );
+                            },
                             child: Column(
                               children: [
                                 Icon(
@@ -365,7 +383,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               shadowColor: Colors.transparent,
                               padding: EdgeInsets.all(5),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return Login();
+                                  },
+                                ),
+                              );
+                            },
                             child: Column(
                               children: [
                                 Icon(
@@ -403,7 +430,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               shadowColor: Colors.transparent,
                               padding: EdgeInsets.all(5),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return Login();
+                                  },
+                                ),
+                              );
+                            },
                             child: Column(
                               children: [
                                 Icon(
@@ -413,7 +449,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 SizedBox(height: 5),
                                 Text(
-                                  'Chờ lấy hàng',
+                                  'Chờ giao hàng',
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.black,
@@ -441,7 +477,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               shadowColor: Colors.transparent,
                               padding: EdgeInsets.all(5),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return Login();
+                                  },
+                                ),
+                              );
+                            },
                             child: Column(
                               children: [
                                 Icon(
@@ -509,7 +554,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             shadowColor: Colors.transparent,
                             padding: EdgeInsets.all(0),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return Login();
+                                },
+                              ),
+                            );
+                          },
                           child: Column(
                             children: [
                               Image.asset('assets/sale.png', scale: 3),
@@ -536,7 +590,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             shadowColor: Colors.transparent,
                             padding: EdgeInsets.all(0),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return Login();
+                                },
+                              ),
+                            );
+                          },
                           child: Column(
                             children: [
                               Padding(
@@ -570,7 +633,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             shadowColor: Colors.transparent,
                             padding: EdgeInsets.all(0),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return Login();
+                                },
+                              ),
+                            );
+                          },
                           child: Column(
                             children: [
                               Padding(
@@ -600,7 +672,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             shadowColor: Colors.transparent,
                             padding: EdgeInsets.all(0),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return Login();
+                                },
+                              ),
+                            );
+                          },
                           child: Column(
                             children: [
                               Padding(

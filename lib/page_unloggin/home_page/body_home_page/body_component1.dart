@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../../profile_page/login.dart';
 
 class Component1 extends StatefulWidget {
@@ -31,10 +30,6 @@ class _Component1State extends State<Component1> {
         "text": "Miễn phí Ship",
         "image": "assets/img_freeDelivery.png",
         "onPressed": () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Login()),
-          );
         },
       },
       {
