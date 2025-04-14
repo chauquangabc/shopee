@@ -42,7 +42,7 @@ class _ImageProductIntroState extends State<ImageProductIntro> {
               });
             },
             itemBuilder:
-                (context, index) => Image.asset(
+                (context, index) => Image.network(
                   widget.products.images[index],
                   fit: BoxFit.contain,
                 ),
@@ -85,7 +85,7 @@ class _ImageProductIntroState extends State<ImageProductIntro> {
           ),
         ),
         margin: EdgeInsets.only(right: 15),
-        child: Image.asset(widget.products.images[index], fit: BoxFit.contain),
+        child: Image.network(widget.products.images[index], fit: BoxFit.contain),
       ),
     );
   }

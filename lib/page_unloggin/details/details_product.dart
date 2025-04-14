@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:remixicon/remixicon.dart';
+import 'package:shopee/page_unloggin/profile_page/login.dart';
 import '../../models/products.dart';
 import 'image_product_intro.dart';
 
@@ -131,26 +132,11 @@ class _DetailsProductState extends State<DetailsProduct> {
             ),
             Container(
               margin: EdgeInsets.only(top: 10),
-              height: 2,
+              height: 10,
               width: double.infinity,
               color: Colors.grey[200],
             ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 15),
-              height: 200,
-              width: double.infinity,
-              color: Colors.grey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Mô tả sản phẩm ',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Text('''${widget.products.description} ''')
-                ],
-              ),
-            ),
+            ProductDescription(products: widget.products),
             Container(
               height: 200,
               width: double.infinity,
@@ -182,6 +168,14 @@ class _DetailsProductState extends State<DetailsProduct> {
                       child: GestureDetector(
                         onTap: () {
                           print('Chat');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return Login();
+                              },
+                            ),
+                          );
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -208,6 +202,14 @@ class _DetailsProductState extends State<DetailsProduct> {
                       child: GestureDetector(
                         onTap: () {
                           print("Add Shopping Cart");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return Login();
+                              },
+                            ),
+                          );
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -238,6 +240,14 @@ class _DetailsProductState extends State<DetailsProduct> {
               child: GestureDetector(
                 onTap: () {
                   print('Mua hàng ');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return Login();
+                      },
+                    ),
+                  );
                 },
                 child: Container(
                   height: double.infinity,
@@ -268,6 +278,14 @@ class ButtonShoppingCart extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         print('click shopping cart');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return Login();
+            },
+          ),
+        );
       },
       child: Stack(
         children: [
@@ -299,6 +317,81 @@ class ButtonShoppingCart extends StatelessWidget {
                 child: Center(child: Text('$numberOfItems')),
               ),
             ),
+        ],
+      ),
+    );
+  }
+}
+
+class ProductDescription extends StatefulWidget {
+  final Product products;
+
+  const ProductDescription({Key? key, required this.products})
+    : super(key: key);
+
+  @override
+  State<ProductDescription> createState() => _ProductDescriptionState();
+}
+
+class _ProductDescriptionState extends State<ProductDescription> {
+  bool isExpanded = false;
+
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: const Text(
+              'Mô tả sản phẩm',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(height: 8),
+          AnimatedCrossFade(
+            crossFadeState:
+                isExpanded
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
+            duration: const Duration(milliseconds: 300),
+            firstChild: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Text(
+                widget.products.description,
+                maxLines: 5,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            secondChild: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Text(
+                widget.products.description,
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 10),
+            height: 2,
+            width: double.infinity,
+            color: Colors.grey[200],
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                isExpanded = !isExpanded;
+              });
+            },
+            child: Center(
+              child: Text(
+                isExpanded ? 'Thu gọn ▲' : 'Xem thêm ▼',
+                style: const TextStyle(color: Colors.blue),
+              ),
+            ),
+          ),
         ],
       ),
     );

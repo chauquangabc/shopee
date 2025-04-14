@@ -1,6 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../page_unloggin/main_page_unloggin.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shopee/page_logged/profile/profile_screen_logged.dart';
+
+import 'home_screen_logged/home_screen_logged.dart';
+
 
 class MainPageLogged extends StatefulWidget {
   const MainPageLogged({super.key});
@@ -10,28 +14,47 @@ class MainPageLogged extends StatefulWidget {
 }
 
 class _MainPageLoggedState extends State<MainPageLogged> {
+
+  List<Widget> _page = [];
+  int _currentPage = 0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    _page = [
+      HomeScreenLogged(),
+      Container(color: Colors.grey,),
+      ProfileScreenLogged()
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.grey,
-        child: Center(
-          child: Container(
-            child: ElevatedButton(
-              onPressed: () async{
-                await FirebaseAuth.instance.signOut();
-                Navigator.popUntil(context, (route) => route.isFirst); // Quay về màn hình chính
-                // FirebaseAuth.instance.signOut();
-                // Navigator.pushReplacement(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => MainPageUnLoggin()),
-                // );
-                // print('Log Out Sucesful!');
-              },
-              child: Text("Log Out"),
-            ),
+      body: _page.elementAt(_currentPage),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _currentPage,
+        selectedItemColor: Colors.orange,
+        onTap: (index) {
+          setState(() {
+            _currentPage = index;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: FaIcon(FontAwesomeIcons.houseMedical),
+            label: 'Home',
           ),
-        ),
+          BottomNavigationBarItem(
+            icon: FaIcon(FontAwesomeIcons.shop),
+            label: 'Mall',
+          ),
+          BottomNavigationBarItem(
+            icon: FaIcon(FontAwesomeIcons.user),
+            label: 'Tôi',
+          ),
+        ],
+        backgroundColor: Colors.white,
       ),
     );
   }

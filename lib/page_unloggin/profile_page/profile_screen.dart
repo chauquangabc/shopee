@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:shopee/page_unloggin/profile_page/register.dart';
 
+import '../../page_logged/profile/intro_version_screen.dart';
 import 'login.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -199,7 +200,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         backgroundColor: Colors.white,
                         shadowColor: Colors.transparent,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>IntroductionVersion()));
+                      },
                       child: Row(
                         children: [
                           FaIcon(
