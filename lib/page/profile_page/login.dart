@@ -5,12 +5,15 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shopee/page_unloggin/profile_page/register.dart';
 
-import '../../page_logged/main_page_logged.dart';
+import '../main_page.dart';
 import 'forgot_password.dart';
 import 'login_seller.dart';
 
 class Login extends StatefulWidget {
-  const Login({super.key});
+  final VoidCallback? onLoggedIn;
+  final bool needBackToMainPage;
+
+  const Login({super.key, this.needBackToMainPage = false, this.onLoggedIn});
 
   @override
   State<Login> createState() => _LoginState();
@@ -27,10 +30,18 @@ class _LoginState extends State<Login> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => MainPageLogged()),
-      );
+      if (widget.onLoggedIn != null) {
+        widget.onLoggedIn!();
+      }
+
+      if (widget.needBackToMainPage) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => MainPage()),
+          (route) => false,
+        );
+      } else {
+        Navigator.pop(context);
+      }
       debugPrint('Login successful!');
     } catch (e) {
       debugPrint('Error during login: $e');
@@ -45,7 +56,6 @@ class _LoginState extends State<Login> {
     // TODO: implement dispose
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

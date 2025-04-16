@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../../page_logged/main_page_logged.dart';
 import 'login.dart';
 
 class Register extends StatefulWidget {
@@ -41,10 +40,10 @@ class _RegisterState extends State<Register> {
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => MainPageLogged()),
-        );
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => MainPageLogged()),
+        // );
         print('Register Succesful');
       } else {
         print('Bugggg');

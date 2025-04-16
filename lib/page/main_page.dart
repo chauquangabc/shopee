@@ -1,32 +1,26 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shopee/page_logged/profile/profile_screen_logged.dart';
-
-import 'home_screen_logged/home_screen_logged.dart';
-
-
-class MainPageLogged extends StatefulWidget {
-  const MainPageLogged({super.key});
+import 'profile_page/profile_screen.dart';
+import 'home_page/body_home_page/body_main_page.dart';
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
 
   @override
-  State<MainPageLogged> createState() => _MainPageLoggedState();
+  State<MainPage> createState() => _MainPageState();
 }
-
-class _MainPageLoggedState extends State<MainPageLogged> {
-
+class _MainPageState extends State<MainPage> {
   List<Widget> _page = [];
   int _currentPage = 0;
   @override
   void initState() {
     // TODO: implement initState
     _page = [
-      HomeScreenLogged(),
+      HomeScreen(),
       Container(color: Colors.grey,),
-      ProfileScreenLogged()
+      ProfileScreen()
     ];
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +28,7 @@ class _MainPageLoggedState extends State<MainPageLogged> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentPage,
-        selectedItemColor: Colors.orange,
+       selectedItemColor: Colors.orange,
         onTap: (index) {
           setState(() {
             _currentPage = index;

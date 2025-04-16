@@ -4,7 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:shopee/page_unloggin/profile_page/register.dart';
 
-import '../../page_logged/profile/intro_version_screen.dart';
+import 'intro_version_screen.dart';
+import 'profile_screen_logged.dart';
 import 'login.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -15,254 +16,284 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(237, 78, 46, 1),
-        flexibleSpace: Align(
-          alignment: Alignment.bottomLeft,
-          child: Container(
-            margin: EdgeInsets.only(left: 15, bottom: 10),
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return Login();
-                    },
+    return StreamBuilder(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        final user = snapshot.data;
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (user == null) {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Color.fromRGBO(237, 78, 46, 1),
+              flexibleSpace: Align(
+                alignment: Alignment.bottomLeft,
+                child: Container(
+                  margin: EdgeInsets.only(left: 15, bottom: 10),
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30),
                   ),
-                );
-              },
-              icon: FaIcon(FontAwesomeIcons.user, color: Colors.orange),
-            ),
-          ),
-        ),
-        actions: [
-          Container(
-            height: 40,
-            decoration: BoxDecoration(color: Colors.white),
-            child: TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return Login();
+                  child: IconButton(
+                    onPressed: () {
+
                     },
+                    icon: FaIcon(FontAwesomeIcons.user, color: Colors.orange),
                   ),
-                );
-              },
-              child: Text(
-                'Đăng nhập',
-                style: TextStyle(
-                  color: Colors.orange,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-          ),
-          SizedBox(width: 10),
-          Container(
-            height: 39,
-            decoration: BoxDecoration(
-              color: Color.fromRGBO(237, 78, 46, 1),
-              border: Border.all(color: Colors.white),
-            ),
-            child: TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return Register();
-                    },
-                  ),
-                );
-              },
-              child: Text('Đăng ký', style: TextStyle(color: Colors.white)),
-            ),
-          ),
-          SizedBox(width: 10),
-        ],
-      ),
-      body: Container(
-        color: Color.fromRGBO(214, 217, 217, 1),
-        child: Column(
-          children: [
-            _buildExpanded1(context),
-            SizedBox(height: 10),
-            _buildExpanded2(context),
-            SizedBox(height: 10),
-            Expanded(
-              flex: 2,
-              child: Container(
-                color: Colors.white,
-                child: Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          'Hỗ trợ',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+              actions: [
+                Container(
+                  height: 40,
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => Login(needBackToMainPage: true,onLoggedIn: () {
+                            Navigator.popUntil(context, (route) => route.isFirst);
+                          },),
                         ),
+                      );
+
+
+                    },
+
+                    child: Text(
+                      'Đăng nhập',
+                      style: TextStyle(
+                        color: Colors.orange,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        shadowColor: Colors.transparent,
-                      ),
-                      onPressed: () {},
-                      child: Row(
-                        children: [
-                          FaIcon(
-                            FontAwesomeIcons.circleQuestion,
-                            size: 25,
-                            color: Colors.black,
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            'Trung tâm trợ giúp',
-                            style: TextStyle(fontSize: 20, color: Colors.black),
-                          ),
-                          Spacer(),
-                          FaIcon(
-                            FontAwesomeIcons.angleRight,
-                            color: Colors.grey,
-                            size: 25,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      height: 1,
-                      color: Colors.grey,
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        shadowColor: Colors.transparent,
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return Login();
-                            },
-                          ),
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          FaIcon(
-                            FontAwesomeIcons.comment,
-                            size: 25,
-                            color: Colors.black,
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            'Trò chuyện',
-                            style: TextStyle(fontSize: 20, color: Colors.black),
-                          ),
-                          Spacer(),
-                          FaIcon(
-                            FontAwesomeIcons.angleRight,
-                            color: Colors.grey,
-                            size: 25,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      height: 1,
-                      color: Colors.grey,
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        shadowColor: Colors.transparent,
-                      ),
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>IntroductionVersion()));
-                      },
-                      child: Row(
-                        children: [
-                          FaIcon(
-                            FontAwesomeIcons.blog,
-                            size: 25,
-                            color: Colors.black,
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            'Giới thiệu',
-                            style: TextStyle(fontSize: 20, color: Colors.black),
-                          ),
-                          Spacer(),
-                          FaIcon(
-                            FontAwesomeIcons.angleRight,
-                            color: Colors.grey,
-                            size: 25,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      height: 1,
-                      color: Colors.grey,
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        shadowColor: Colors.transparent,
-                      ),
-                      onPressed: () {},
-                      child: Row(
-                        children: [
-                          FaIcon(
-                            FontAwesomeIcons.gear,
-                            size: 25,
-                            color: Colors.black,
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            'Cài đặt',
-                            style: TextStyle(fontSize: 20, color: Colors.black),
-                          ),
-                          Spacer(),
-                          FaIcon(
-                            FontAwesomeIcons.angleRight,
-                            color: Colors.grey,
-                            size: 25,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
+                SizedBox(width: 10),
+                Container(
+                  height: 39,
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(237, 78, 46, 1),
+                    border: Border.all(color: Colors.white),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return Register();
+                          },
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Đăng ký',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 10),
+              ],
+            ),
+            body: Container(
+              color: Color.fromRGBO(214, 217, 217, 1),
+              child: Column(
+                children: [
+                  _buildExpanded1(context),
+                  SizedBox(height: 10),
+                  _buildExpanded2(context),
+                  SizedBox(height: 10),
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      color: Colors.white,
+                      child: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Text(
+                                'Hỗ trợ',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              shadowColor: Colors.transparent,
+                            ),
+                            onPressed: () {},
+                            child: Row(
+                              children: [
+                                FaIcon(
+                                  FontAwesomeIcons.circleQuestion,
+                                  size: 25,
+                                  color: Colors.black,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Trung tâm trợ giúp',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Spacer(),
+                                FaIcon(
+                                  FontAwesomeIcons.angleRight,
+                                  color: Colors.grey,
+                                  size: 25,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 5,
+                            ),
+                            height: 1,
+                            color: Colors.grey,
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              shadowColor: Colors.transparent,
+                            ),
+                            onPressed: () {
+                            },
+                            child: Row(
+                              children: [
+                                FaIcon(
+                                  FontAwesomeIcons.comment,
+                                  size: 25,
+                                  color: Colors.black,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Trò chuyện',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Spacer(),
+                                FaIcon(
+                                  FontAwesomeIcons.angleRight,
+                                  color: Colors.grey,
+                                  size: 25,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 5,
+                            ),
+                            height: 1,
+                            color: Colors.grey,
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              shadowColor: Colors.transparent,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => IntroductionVersion(),
+                                ),
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                FaIcon(
+                                  FontAwesomeIcons.blog,
+                                  size: 25,
+                                  color: Colors.black,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Giới thiệu',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Spacer(),
+                                FaIcon(
+                                  FontAwesomeIcons.angleRight,
+                                  color: Colors.grey,
+                                  size: 25,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 5,
+                            ),
+                            height: 1,
+                            color: Colors.grey,
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              shadowColor: Colors.transparent,
+                            ),
+                            onPressed: () {},
+                            child: Row(
+                              children: [
+                                FaIcon(
+                                  FontAwesomeIcons.gear,
+                                  size: 25,
+                                  color: Colors.black,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Cài đặt',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Spacer(),
+                                FaIcon(
+                                  FontAwesomeIcons.angleRight,
+                                  color: Colors.grey,
+                                  size: 25,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
+          );
+        }
+        else {
+          return ProfileScreenLogged();
+        }
+      },
     );
   }
 
@@ -285,14 +316,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return Login();
-                        },
-                      ),
-                    );
                   },
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -340,14 +363,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               padding: EdgeInsets.all(5),
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return Login();
-                                  },
-                                ),
-                              );
                             },
                             child: Column(
                               children: [
@@ -387,14 +402,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               padding: EdgeInsets.all(5),
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return Login();
-                                  },
-                                ),
-                              );
                             },
                             child: Column(
                               children: [
@@ -434,14 +441,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               padding: EdgeInsets.all(5),
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return Login();
-                                  },
-                                ),
-                              );
                             },
                             child: Column(
                               children: [
@@ -481,14 +480,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               padding: EdgeInsets.all(5),
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return Login();
-                                  },
-                                ),
-                              );
                             },
                             child: Column(
                               children: [
@@ -558,14 +549,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: EdgeInsets.all(0),
                           ),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return Login();
-                                },
-                              ),
-                            );
                           },
                           child: Column(
                             children: [
@@ -594,14 +577,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: EdgeInsets.all(0),
                           ),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return Login();
-                                },
-                              ),
-                            );
                           },
                           child: Column(
                             children: [
@@ -637,14 +612,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: EdgeInsets.all(0),
                           ),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return Login();
-                                },
-                              ),
-                            );
+
                           },
                           child: Column(
                             children: [
@@ -676,14 +644,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: EdgeInsets.all(0),
                           ),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return Login();
-                                },
-                              ),
-                            );
+
                           },
                           child: Column(
                             children: [
